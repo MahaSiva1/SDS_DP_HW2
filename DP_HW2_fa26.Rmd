@@ -28,7 +28,12 @@ x[1:5, 1:5]
 ## Image 1
 ```{r}
 pca_rank_k_approx <- function(X, k) {
-  pca <- prcomp(X)
+
+  pca <- prcomp(
+    X,
+    center = FALSE,
+    scale. = FALSE
+  )
 
   Z <- pca$x
   U <- pca$rotation
@@ -36,9 +41,7 @@ pca_rank_k_approx <- function(X, k) {
   Zk <- Z[, 1:k, drop = FALSE]
   Uk <- U[, 1:k, drop = FALSE]
 
-  Xk_centered <- Zk %*% t(Uk)
-
-  Xk <- sweep(Xk_centered, 2, pca$center, FUN = "+")
+  Xk <- Zk %*% t(Uk)
 
   error <- norm(X - Xk, type = "F")
 
@@ -48,9 +51,7 @@ pca_rank_k_approx <- function(X, k) {
     U = U,
     Z = Z
   )
-
 }
-
 
 ```
 ### Part 2
@@ -107,7 +108,11 @@ plot(
 
 ```{r}
 ## First Eigenvector and First PC score 
-pca <- prcomp(x)
+pca <- prcomp( x,
+  center = FALSE,
+  scale. = FALSE
+)
+
 
 u1 <- pca$rotation[, 1]
 z1 <- pca$x[, 1]
@@ -133,9 +138,10 @@ plot(
 
 ## Interpretation for Image 1
 
-Image 1: The first eigenvector contains both positive and negative loadings across the image columns, with some columns contributing more strongly than others. This indicates that the first principal component captures variation across several parts of the image rather than being dominated by only one column. The first PC scores fluctuate around zero across the rows, showing that the strength and direction of this pattern varies throughout the image.
+The first eigenvector is dominated by a very large loading around column 78, while the loadings for nearly all other columns are close to zero. This indicates that the first principal component is primarily capturing a feature concentrated around this column, while the remaining columns contribute relatively little to the dominant pattern. The first PC scores also remain relatively consisten across the rows, most values being concentrated around -20 and larger deviations. This suggests that the dominant pattern identified by the first eigenvector is present fairly consistently throughout the rows of the image, although its strength varies somewhat from row to row.
 
-For Image 1, I think k=10 provides a good approximation. The rank-10 image viusally preserves the main structure of the original, even though the frobenius error continues to decrease at larger values of k.
+
+For Image 1, I think k=10 provides a good approximation. The rank-10 image visually preserves the main structure of the original, even though the Frobenius error continues to decrease at larger values of k.
 
 
 ## image 2
@@ -195,7 +201,10 @@ plot(
 
 ## Im2, first eigenvector and PC score 
 ```{r}
-pca2 <- prcomp(x2)
+pca2 <- prcomp(x2,
+  center = FALSE,
+  scale. = FALSE
+)
 
 u1_2 <- pca2$rotation[, 1]
 z1_2 <- pca2$x[, 1]
@@ -276,7 +285,10 @@ plot(
 
 ```{r}
 
-pca3 <- prcomp(x3)
+pca3 <- prcomp(x3,
+  center = FALSE,
+  scale. = FALSE
+)
 
 u1_3 <- pca3$rotation[, 1]
 z1_3 <- pca3$x[, 1]
@@ -357,7 +369,10 @@ plot(
 ### first eigenvector and PC score 
 
 ```{r}
-pca4 <- prcomp(x4)
+pca4 <- prcomp(x4,
+  center = FALSE,
+  scale. = FALSE
+)
 
 u1_4 <- pca4$rotation[, 1]
 z1_4 <- pca4$x[, 1]
